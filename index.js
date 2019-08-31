@@ -15,15 +15,9 @@ const path = require("path");
 const express = require("express");
 const app = express();
 
-// 업로더 패키지
-const multer = require('multer');
-const multerGoogleStorage = require("multer-google-storage");
-const uploadHandler = multer({
-  storage: multerGoogleStorage.storageEngine()
-});
-
 // 환경변수 가져오기
 require('dotenv').config();
+const request = require("request-promise");
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`서버가 ${process.env.SERVER_PORT} 번 포트에서 열렸습니다.`);
@@ -94,11 +88,49 @@ app.get('/crawler/:username', (req, res, next) => {
 
 app.get('/upload', (req, res, next) => {
   // 로컬 파일 자체를 저장하는 것은 좀 그렇겠구만
-  res.send('업로드 완료!');
 });
 
 app.get('/download', (req, res, next) => {
   
+  // 이름에 따라 따로 다운로드가 가능하게 해야겠는데
+  db.collection("instagram_posts").get().then((snapshot) => {
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return;
+    } else {
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const image_url = data.image_url;
+        const image_name = String(data.timestamp);
+
+        (async () => {
+          await request(image_url).on("response", () => {
+            console.log('hey!')
+          }).pipe(fs.createWriteStream(image_name + '.jpg'));
+
+          await gcs_upload('song-bucket', image_name + '.jpg').then(async () => {
+            await fs.unlink(image_name + '.jpg', (err) => {
+              if (err) {
+                console.log(err);
+              }
+              console.log('deleted!');
+            });
+          }).catch(error => {
+            console.log(error)
+          });
+        })();
+      });
+    }
+    res.send('완료!');
+  }).catch(err => {
+    console.log(err);
+  }).then();
+
+
+  // fs.mkdir(`./instagram/${}`)
+  // let img = request('https://scontent-icn1-1.cdninstagram.com/vp/569cd32c0741f663c09c8ef82cd270d6/5E04AACC/t51.2885-15/e35/69218305_2348720548716712_311025405392218625_n.jpg?_nc_ht=scontent-icn1-1.cdninstagram.com');
+
+  // res.download(img);
 });
 
 app.get('/', (req, res, next) => {

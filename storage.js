@@ -1,8 +1,6 @@
 const {Storage} = require('@google-cloud/storage');
 const storage = new Storage();
 
-const bucket = 'song-bucket';
-
 async function upload (bucketName, filename) {
   // Uploads a local file to the bucket
   await storage.bucket(bucketName).upload(filename, {
