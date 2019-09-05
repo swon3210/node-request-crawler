@@ -2,13 +2,13 @@ const firebase = require('firebase');
 require('firebase/firestore');
 
 var firebaseConfig = {
-  apiKey: "AIzaSyDr2xUut4qKcqNHx82LqvRNrmSEvxuBdJs",
-  authDomain: "kube-da290.firebaseapp.com",
-  databaseURL: "https://kube-da290.firebaseio.com",
-  projectId: "kube-da290",
+  apiKey: "AIzaSyC7yCDP6owBa_h7TsJQeQOqEz4g02-FqrE",
+  authDomain: "my-user-project-249107.firebaseapp.com",
+  databaseURL: "https://my-user-project-249107.firebaseio.com",
+  projectId: "my-user-project-249107",
   storageBucket: "",
-  messagingSenderId: "450803108144",
-  appId: "1:450803108144:web:ccc7711ee007ef4e"
+  messagingSenderId: "508994781040",
+  appId: "1:508994781040:web:74e334628a973f89"
 };
 
 // Initialize Firebase

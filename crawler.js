@@ -29,9 +29,9 @@ async function crawler (username) {
       id: node.id,
       shortcode: node.shortcode,
       timestamp: node.taken_at_timestamp,
-      links: node.edge_liked_by.count,
-      comments: node.edge_media_to_comment.count,
-      video_views: node.video_view_count,
+      links: node.edge_liked_by.count ? node.edge_liked_by.count : 0,
+      comments: node.edge_media_to_comment.count ? node.edge_media_to_comment.count : 0,
+      video_views: node.video_view_count ? node.video_view_count : 0,
       caption: node.edge_media_to_caption.edges[0].node.text,
       image_url: node.display_url
     });
@@ -39,9 +39,9 @@ async function crawler (username) {
 
   let instagram_user_profile = {
     id: user.id,
-    followers: user.edge_followed_by.count,
-    following: user.edge_follow.count,
-    uploads: user.edge_owner_to_timeline_media.count,
+    followers: user.edge_followed_by.count ? user.edge_followed_by.count : 0,
+    following: user.edge_follow.count ? user.edge_follow.count : 0,
+    uploads: user.edge_owner_to_timeline_media.count ? user.edge_owner_to_timeline_media.count : 0,
     full_name: user.full_name,
     picture_url: user.profile_pic_url_hd
   }
@@ -55,7 +55,5 @@ async function crawler (username) {
 
   return result;
 }
-
-crawler('lvlz_kei');
 
 module.exports = crawler;
